@@ -1,0 +1,8 @@
+skytemple >= 1.6.0
+skytemple-files >= 1.6.0
+pmdsky-debug-py
+range-typed-integers >= 1.0.0
+
+mypy
+black
+pycln
