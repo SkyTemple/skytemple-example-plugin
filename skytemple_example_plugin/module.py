@@ -11,7 +11,7 @@ from skytemple.core.item_tree import (
     RecursionType,
 )
 from skytemple.core.open_request import OpenRequest
-from skytemple.core.rom_project import RomProject
+from skytemple.core.rom_project import RomProject, BinaryName
 from skytemple.core.string_provider import StringType
 from skytemple.core.widget.status_page import StStatusPageData, StStatusPage
 from skytemple.module.dungeon.module import DungeonModule
@@ -19,6 +19,7 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import MONSTER_MD
 from skytemple_files.data.md.protocol import MdProtocol, MdEntryProtocol
+from skytemple_files.hardcoded.text_speed import HardcodedTextSpeed
 
 from skytemple_example_plugin.util import REQUEST_OPEN_TYPE
 from skytemple_example_plugin.widget.monster_spawns import (
@@ -149,7 +150,7 @@ class ExamplePluginModule(AbstractModule):
         # We now iterate through all Pokémon in the monster database. We only care about
         # base forms. To do that we go through all entries and only take the first
         # form for a "base ID".
-        # Note: This will not work properly like this with the "ExpandPokeList" applied.
+        # Note: This will not work properly like this with the "ExpandPokeList" patch applied.
         # See the "monster" module for how to make this work with that patch.
         monster_entries_by_base_id: Dict[int, MdEntryProtocol] = {}
         for entry in self.md.entries:
@@ -183,6 +184,25 @@ class ExamplePluginModule(AbstractModule):
         # We remember a reference to the item tree. We need this later to mark
         # an entry as modified.
         self.item_tree = item_tree
+
+        # Some more demonstrations of features.
+        # The ROM module gives access to the "static data" of the ROM. This includes some metadata
+        # and pmdsky-debug symbols.
+        rom_module = self.rom_project.get_rom_module()
+        static_data = rom_module.get_static_data()
+        logger.debug(f"ROM region: {static_data.game_region}")
+        logger.debug(
+            f"Start of actor list in arm9: 0x{static_data.bin_sections.arm9.data.ACTOR_LIST.address:0x}"
+        )
+        # get arm9 as binary:
+        arm9 = self.rom_project.get_binary(BinaryName.ARM9)
+        # Get arm9, do something and save it back to ROM:
+        # >>> def modify(arm9: bytearray): ...
+        # >>> self.rom_project.modify_binary(BinaryName.ARM9, modify)
+        # Get and set hardcoded data:
+        val = HardcodedTextSpeed.get_text_speed(arm9, static_data)
+        logger.debug(f"Text speed: {val}")
+        # >>> self.rom_project.modify_binary(BinaryName.ARM9, lambda bin: HardcodedTextSpeed.set_text_speed(val, bin, static_data))
 
     def handle_request(self, request: OpenRequest) -> Optional[ItemTreeEntryRef]:
         """
@@ -219,7 +239,7 @@ class ExamplePluginModule(AbstractModule):
         self.dungeon_module.save_mappa()
         # This will do:
         # >>> self.project.mark_as_modified(MAPPA_PATH)
-        # This tells SkyTemple to the mappa file again when the user saves.
+        # This tells SkyTemple to save the mappa file again when the user saves.
         # Note that we don't need to provide the file type. SkyTemple remembers.
         # It will also do some extra things related to the mappa_g file, not super important here.
 
