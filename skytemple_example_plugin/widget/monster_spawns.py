@@ -153,9 +153,32 @@ class StExamplePluginMonsterSpawns(Gtk.Box):
 
     # Same as above but for monster houses.
     @Gtk.Template.Callback()
-    def on_cr_mh_weight_edited(self, *args):
+    def on_cr_mh_weight_edited(self, widget, path, value_raw):
         # See above. This is mostly copy+paste.
-        pass
+        assert self.module.dungeon_module is not None
+        try:
+            value = int(value_raw)
+        except ValueError:
+            return
+        row = self.store_spawn_list[path]
+        mappa = self.module.dungeon_module.get_mappa()
+        monster_spawns = mappa.floor_lists[row[0]][row[1]].monsters
+        self_index_in_monster_list = None
+        for i, monster in enumerate(monster_spawns):
+            if monster.md_index == self.item_data.entry.md_index_base:
+                self_index_in_monster_list = i
+                break
+        assert self_index_in_monster_list is not None
+        relative_weights = self.module.dungeon_module.calculate_relative_weights(
+            [x.monster_house_spawn_weight for x in monster_spawns]
+        )
+        row[6] = value
+        relative_weights[self_index_in_monster_list] = value
+        absolute_weights = self._recalculate_monster_spawn_rates(relative_weights)
+        for monster, weight in zip(monster_spawns, absolute_weights):
+            monster.monster_house_spawn_weight = u16(weight)
+        mappa.floor_lists[row[0]][row[1]].monsters = monster_spawns
+        self.module.save(self.item_data.entry.md_index_base)
 
     # This fills the list.
     def _fill(self):
