@@ -19,7 +19,6 @@ from skytemple_files.common.i18n_util import _
 from skytemple_files.common.types.file_types import FileType
 from skytemple_files.common.util import MONSTER_MD
 from skytemple_files.data.md.protocol import MdProtocol, MdEntryProtocol
-from skytemple_files.dungeon_data.mappa_bin.protocol import MappaBinProtocol
 
 from skytemple_example_plugin.util import REQUEST_OPEN_TYPE
 from skytemple_example_plugin.widget.monster_spawns import (
