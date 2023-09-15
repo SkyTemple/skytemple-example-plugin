@@ -22,6 +22,7 @@ dependencies = [
     'skytemple-files >= 1.6.0',
     'pmdsky-debug-py',
     'range-typed-integers >= 1.0.0',
+    'pygobject >= 3.26.0'
 ]
 
 [project.entry-points."skytemple.module"]
