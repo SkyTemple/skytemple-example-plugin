@@ -247,7 +247,7 @@ class ExamplePluginModule(AbstractModule):
         # We defer the saving to the dungeon module.
         self.dungeon_module.save_mappa()
         # This will do:
-        # >>> self.project.mark_as_modified(MAPPA_PATH)
+        # >>> self.rom_project.mark_as_modified(MAPPA_PATH)
         # This tells SkyTemple to save the mappa file again when the user saves.
         # Note that we don't need to provide the file type. SkyTemple remembers.
         # It will also do some extra things related to the mappa_g file, not super important here.
