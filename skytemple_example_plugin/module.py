@@ -63,6 +63,10 @@ class ExamplePluginModule(AbstractModule):
         """
         Your plugin gets passed in the RomProject when it is created.
         This is your primary way to interact with the game and other modules.
+
+        Note that `__init__` is called before all modules are loaded, so even modules
+        you defined in `depends_on` may not exist yet. You can override the option `AbstractModule.load`
+        method to perform load operations that need those dependencies.
         """
         self.rom_project = rom_project
         self.monster_entries = {}
@@ -132,6 +136,11 @@ class ExamplePluginModule(AbstractModule):
         # of `FileType`. In this case we want to open the monster database, which has the
         # MD type. Some files have constants that point to their path, such as the `MONSTER_MD`
         # constant, which is the same as writing "BALANCE/monster.md".
+        #
+        # The second parameter can actually not just be a `FileType`, it can be any class
+        # that implements `skytemple_files.common.types.data_handler.DataHandler`. This means
+        # you can also use this to implement your own file handling.
+        # Any `kwarg`s passed into `open_file_in_rom` will be passed to the methods in your data handler.
         self.md = self.rom_project.open_file_in_rom(MONSTER_MD, FileType.MD)
         # Since we are depending on the `monster` module, we could also have used its
         # reference to the MD file. However in general try to keep coupling between the
