@@ -51,13 +51,13 @@ class ExamplePluginModule(AbstractModule):
 
     rom_project: RomProject
     # This stores a mapping of all Pokémon IDs and the views to edit them.
-    monster_entries: Dict[int, ItemTreeEntryRef]
+    monster_entries: dict[int, ItemTreeEntryRef]
     # The monster database read from the ROM
-    md: Optional[MdProtocol]
+    md: MdProtocol | None
     # A reference to the DungeonModule.
-    dungeon_module: Optional[DungeonModule]
+    dungeon_module: DungeonModule | None
     # The main item tree.
-    item_tree: Optional[ItemTree]
+    item_tree: ItemTree | None
 
     def __init__(self, rom_project: RomProject):
         """
@@ -74,7 +74,7 @@ class ExamplePluginModule(AbstractModule):
         self.mappa = None
 
     @classmethod
-    def depends_on(cls) -> List[str]:
+    def depends_on(cls) -> list[str]:
         """
         This returns a list of modules that your plugin needs. This can be another plugin module
         or one of the built-in modules, which are listed in SkyTemple's setup.py
@@ -161,7 +161,7 @@ class ExamplePluginModule(AbstractModule):
         # form for a "base ID".
         # Note: This will not work properly like this with the "ExpandPokeList" patch applied.
         # See the "monster" module for how to make this work with that patch.
-        monster_entries_by_base_id: Dict[int, MdEntryProtocol] = {}
+        monster_entries_by_base_id: dict[int, MdEntryProtocol] = {}
         for entry in self.md.entries:
             if entry.md_index_base not in monster_entries_by_base_id:
                 monster_entries_by_base_id[entry.md_index_base] = entry
@@ -213,7 +213,7 @@ class ExamplePluginModule(AbstractModule):
         logger.debug(f"Text speed: {val}")
         # >>> self.rom_project.modify_binary(BinaryName.ARM9, lambda bin: HardcodedTextSpeed.set_text_speed(val, bin, static_data))
 
-    def handle_request(self, request: OpenRequest) -> Optional[ItemTreeEntryRef]:
+    def handle_request(self, request: OpenRequest) -> ItemTreeEntryRef | None:
         """
         This allows your plugin to handle a request to open something. Your module or other modules
         can send these requests to SkyTemple and SkyTemple will ask all modules whether they can

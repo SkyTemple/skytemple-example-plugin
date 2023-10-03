@@ -189,7 +189,7 @@ class StExamplePluginMonsterSpawns(Gtk.Box):
 
         # The dungeon list defines what floor list a dungeon uses. We now create a mapping of
         # <floor list id> -> <all dungeons using it> so we can later display the name of the dungeon in the list.
-        floor_list_mapping: Dict[int, List[Tuple[int, DungeonDefinition]]] = {}
+        floor_list_mapping: dict[int, list[tuple[int, DungeonDefinition]]] = {}
         for dungeon_id, dungeon in enumerate(dungeons):
             if dungeon.mappa_index not in floor_list_mapping:
                 floor_list_mapping[dungeon.mappa_index] = []
@@ -249,10 +249,10 @@ class StExamplePluginMonsterSpawns(Gtk.Box):
     # Sadly there is no central logic in the dungeon module we can use.
     @staticmethod
     def get_dungeon_relative_ids(
-        floor_list_mapping: Dict[int, List[Tuple[int, DungeonDefinition]]],
+        floor_list_mapping: dict[int, list[tuple[int, DungeonDefinition]]],
         floor_group_id: int,
         floor_id_in_floor_group: int,
-    ) -> Optional[int]:
+    ) -> int | None:
         try:
             possible_dungeons = floor_list_mapping[floor_group_id]
         except KeyError:
@@ -274,7 +274,7 @@ class StExamplePluginMonsterSpawns(Gtk.Box):
     # This is more or less copied from the dungeon floor editor. Don't worry too much about it.
     # This recalculates the absolute spawn weights.
     @staticmethod
-    def _recalculate_monster_spawn_rates(relative_weights: List[int]) -> List[int]:
+    def _recalculate_monster_spawn_rates(relative_weights: list[int]) -> list[int]:
         sum_of_weights_main = sum(relative_weights)
 
         output = []
