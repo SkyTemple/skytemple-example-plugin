@@ -10,7 +10,7 @@ authors = [
 ]
 description = "An example plugin for SkyTemple."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 keywords = ["skytemple", "skytemple-plugin"]
 license = {text = "GPL-3.0-or-later"}
 classifiers = [
