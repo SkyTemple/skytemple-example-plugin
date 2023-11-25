@@ -6,3 +6,4 @@ range-typed-integers >= 1.0.0
 mypy
 black
 pycln
+pygobject-stubs --config-settings=config=Gtk3,Gdk3,GtkSource4
