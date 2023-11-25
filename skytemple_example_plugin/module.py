@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from typing import List, Optional, Dict
 
 from skytemple.core.abstract_module import AbstractModule
 from skytemple.core.item_tree import (

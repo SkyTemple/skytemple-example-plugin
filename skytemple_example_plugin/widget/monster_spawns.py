@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import TYPE_CHECKING, cast, Dict, List, Tuple, Optional
+from typing import TYPE_CHECKING, cast
 
 from gi.repository import Gtk, Gdk
 from range_typed_integers import u16
