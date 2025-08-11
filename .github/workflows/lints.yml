@@ -15,7 +15,7 @@ jobs:
       matrix:
         python-version: [ "3.9", "3.10", "3.11", "3.12" ]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: theCapypara/mypy-check@rust-support
       name: Run type checks
       with:
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Code Format Check
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Check unused imports
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Set up Python 3.11
       uses: actions/setup-python@v5
       with:
